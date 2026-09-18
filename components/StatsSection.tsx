@@ -38,9 +38,16 @@ const stats = [
   },
 ];
 
-export default function StatsSection() {
+interface StatsSectionProps {
+  hideBackgroundCanvas?: boolean;
+  className?: string;
+}
+
+export default function StatsSection({
+  className = "",
+}: StatsSectionProps) {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-zinc-100/75 dark:bg-[#09090b]/75 border-y border-zinc-200/80 dark:border-white/10 backdrop-blur-sm transition-colors duration-300 overflow-hidden">
+    <section className={`relative py-20 px-4 sm:px-6 lg:px-8 bg-zinc-100/75 dark:bg-[#09090b]/75 border-y border-zinc-200/80 dark:border-white/10 backdrop-blur-sm transition-colors duration-300 overflow-hidden ${className}`}>
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-[#ea1d05]/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">

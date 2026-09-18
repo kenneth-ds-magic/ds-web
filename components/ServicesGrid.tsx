@@ -2,14 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { 
-  Zap, 
-  Lightbulb, 
-  Globe, 
-  ShieldCheck, 
-  Cpu, 
-  Layers, 
-  ArrowUpRight, 
+import {
+  Zap,
+  Lightbulb,
+  Globe,
+  ShieldCheck,
+  Cpu,
+  Layers,
+  ArrowUpRight,
   Sparkles,
   ArrowRight
 } from "lucide-react";

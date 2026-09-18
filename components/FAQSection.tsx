@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronDown, HelpCircle, CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FAQItem {
   question: string;
@@ -124,47 +125,76 @@ export default function FAQSection() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Accordion */}
+          {/* Right Column: Interactive Accordion with Smooth Sliding */}
           <div className="lg:col-span-7 space-y-4">
             {faqs.map((faq, idx) => {
               const isOpen = openIndex === idx;
               return (
                 <div
                   key={idx}
-                  className={`rounded-2xl transition-all duration-300 border overflow-hidden ${
-                    isOpen
+                  className={`rounded-2xl transition-all duration-300 border overflow-hidden ${isOpen
                       ? "bg-white dark:bg-[#121215] border-[#ea1d05] shadow-lg dark:shadow-[0_10px_30px_rgba(234,29,5,0.25)]"
                       : "bg-zinc-50 dark:bg-[#09090b] border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20"
-                  }`}
+                    }`}
                 >
                   <button
                     onClick={() => toggleFAQ(idx)}
-                    className="w-full flex items-center justify-between p-6 text-left cursor-pointer transition-colors"
+                    className="w-full flex items-center justify-between p-6 text-left cursor-pointer transition-colors select-none"
+                    aria-expanded={isOpen}
                   >
                     <span className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white pr-4">
                       {faq.question}
                     </span>
                     <div
-                      className={`p-2 rounded-xl border transition-all duration-300 shrink-0 ${
-                        isOpen
+                      className={`p-2 rounded-xl border transition-all duration-300 shrink-0 ${isOpen
                           ? "bg-[#ea1d05] border-[#ea1d05] text-white rotate-180"
                           : "bg-zinc-200 dark:bg-white/5 border-zinc-300 dark:border-white/10 text-zinc-700 dark:text-zinc-400"
-                      }`}
+                        }`}
                     >
                       <ChevronDown className="w-4 h-4" />
                     </div>
                   </button>
 
-                  {isOpen && (
-                    <div className="px-6 pb-6 pt-2 border-t border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 space-y-3 text-sm leading-relaxed animate-in fade-in duration-300">
-                      {faq.answers.map((ans, aIdx) => (
-                        <div key={aIdx} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-4 h-4 text-[#ea1d05] shrink-0 mt-0.5" />
-                          <span>{ans}</span>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{
+                          height: "auto",
+                          opacity: 1,
+                          transition: {
+                            height: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
+                            opacity: { duration: 0.25, delay: 0.08 }
+                          }
+                        }}
+                        exit={{
+                          height: 0,
+                          opacity: 0,
+                          transition: {
+                            height: { duration: 0.26, ease: [0.16, 1, 0.3, 1] },
+                            opacity: { duration: 0.18 }
+                          }
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 pt-2 border-t border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 space-y-3 text-sm leading-relaxed">
+                          {faq.answers.map((ans, aIdx) => (
+                            <motion.div
+                              key={aIdx}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.25, delay: aIdx * 0.05 }}
+                              className="flex items-start gap-3"
+                            >
+                              <CheckCircle2 className="w-4 h-4 text-[#ea1d05] shrink-0 mt-0.5" />
+                              <span>{ans}</span>
+                            </motion.div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             })}

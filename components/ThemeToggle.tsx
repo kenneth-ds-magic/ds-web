@@ -24,7 +24,7 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className="relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 cursor-pointer bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 text-zinc-800 shadow-sm dark:bg-[#121215] dark:hover:bg-[#18181b] dark:border-white/15 dark:text-white dark:hover:border-[#e11d48]/50 hover:scale-105"
+      className="relative flex items-center justify-center w-10 h-10  transition-all duration-300 cursor-pointer text-zinc-800 dark:text-white hover:scale-105"
     >
       <div className="relative w-5 h-5 flex items-center justify-center">
         <Sun

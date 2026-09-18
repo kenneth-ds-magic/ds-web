@@ -209,6 +209,45 @@ export default function Hero3DCanvas() {
     let rotX = 0.04;  // Perfectly balanced center tilt (Africa at equator center)
     let autoRotSpeed = 0.003;
 
+    const getGlobeMetrics = (w: number, h: number) => {
+      const dynamicRadius = Math.min(w, h) * (w < 768 ? 0.38 : 0.33);
+      const center = {
+        x: w > 1024 ? w * 0.68 : w * 0.5,
+        y: h * 0.50,
+      };
+      return { dynamicRadius, center };
+    };
+
+    const isPointerOnGlobe = (clientX: number, clientY: number) => {
+      if (!canvas) return false;
+      const rect = canvas.getBoundingClientRect();
+      if (
+        clientX < rect.left ||
+        clientX > rect.right ||
+        clientY < rect.top ||
+        clientY > rect.bottom
+      ) {
+        return false;
+      }
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const { dynamicRadius, center } = getGlobeMetrics(width, height);
+      const dx = x - center.x;
+      const dy = y - center.y;
+      return dx * dx + dy * dy <= (dynamicRadius * 1.05) * (dynamicRadius * 1.05);
+    };
+
+    const updateCursor = (clientX: number, clientY: number) => {
+      if (!canvas) return;
+      if (mouse.isDown) {
+        canvas.style.cursor = "grabbing";
+      } else if (isPointerOnGlobe(clientX, clientY)) {
+        canvas.style.cursor = "grab";
+      } else {
+        canvas.style.cursor = "default";
+      }
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -224,21 +263,67 @@ export default function Hero3DCanvas() {
 
       mouse.lastX = x;
       mouse.lastY = y;
+      updateCursor(e.clientX, e.clientY);
     };
 
     const handleMouseDown = (e: MouseEvent) => {
-      mouse.isDown = true;
-      mouse.lastX = e.clientX;
-      mouse.lastY = e.clientY;
+      if (e.button !== 0) return;
+      if (isPointerOnGlobe(e.clientX, e.clientY)) {
+        mouse.isDown = true;
+        const rect = canvas.getBoundingClientRect();
+        mouse.lastX = e.clientX - rect.left;
+        mouse.lastY = e.clientY - rect.top;
+        if (canvas) canvas.style.cursor = "grabbing";
+      }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: MouseEvent) => {
+      if (mouse.isDown) {
+        mouse.isDown = false;
+        updateCursor(e.clientX, e.clientY);
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        if (isPointerOnGlobe(touch.clientX, touch.clientY)) {
+          mouse.isDown = true;
+          const rect = canvas.getBoundingClientRect();
+          mouse.lastX = touch.clientX - rect.left;
+          mouse.lastY = touch.clientY - rect.top;
+        }
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (mouse.isDown && e.touches.length === 1) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        const deltaX = x - mouse.lastX;
+        const deltaY = y - mouse.lastY;
+        rotY += deltaX * 0.005;
+        rotX -= deltaY * 0.005;
+        rotX = Math.max(-0.85, Math.min(0.85, rotX));
+        mouse.lastX = x;
+        mouse.lastY = y;
+      }
+    };
+
+    const handleTouchEnd = () => {
       mouse.isDown = false;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchcancel", handleTouchEnd);
 
     // Massive Dense Geographic Nodes Collection (~1,800+ Nodes)
     interface GeoNode {
@@ -404,14 +489,7 @@ export default function Hero3DCanvas() {
       ctx.clearRect(0, 0, width, height);
 
       // ================= GLOBE SCREEN SIZING & POSITIONING =================
-      // dynamicRadius: Scale/Radius of the globe (e.g. 0.33 = 33% of viewport min dimension)
-      const dynamicRadius = Math.min(width, height) * (width < 768 ? 0.38 : 0.33);
-
-      // center: Screen position (X: 0.5 = middle, 0.68 = right-aligned on desktop; Y: 0.50 = vertical middle)
-      const center = {
-        x: width > 1024 ? width * 0.68 : width * 0.5,
-        y: height * 0.50,
-      };
+      const { dynamicRadius, center } = getGlobeMetrics(width, height);
 
       // 1. Shaded Planet Body
       const planetShade = ctx.createRadialGradient(
@@ -702,6 +780,10 @@ export default function Hero3DCanvas() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
   }, [theme]);
@@ -709,7 +791,7 @@ export default function Hero3DCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing z-0"
+      className="absolute inset-0 w-full h-full pointer-events-auto z-0"
       style={{ opacity: 1 }}
     />
   );

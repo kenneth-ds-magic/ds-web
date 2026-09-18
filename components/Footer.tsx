@@ -4,14 +4,19 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, MapPin, ArrowUpRight, ShieldCheck } from "lucide-react";
+import FooterNetworkCanvas from "./FooterNetworkCanvas";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="relative bg-zinc-100/80 dark:bg-[#000000]/80 backdrop-blur-md border-t border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 pt-16 pb-12 transition-colors duration-300 overflow-hidden">
-      {/* Background ambient red glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[#ea1d05]/10 blur-[100px] pointer-events-none" />
+      {/* 3D Digitization & Networking Nodes Web Canvas */}
+      <FooterNetworkCanvas />
+
+      {/* Background ambient red glow & subtle grid */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[#ea1d05]/10 blur-[100px] pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-grid-pattern opacity-10 dark:opacity-15 pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-zinc-300 dark:border-zinc-800">
@@ -101,6 +106,17 @@ export default function Footer() {
                   className="inline-flex items-center gap-1 text-zinc-600 dark:text-zinc-400 hover:text-[#ea1d05] transition-colors"
                 >
                   <span>Njiwa eSIM</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://msitu.tech/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-zinc-600 dark:text-zinc-400 hover:text-[#ea1d05] transition-colors"
+                >
+                  <span>MSITU</span>
                   <ArrowUpRight className="w-3 h-3" />
                 </a>
               </li>

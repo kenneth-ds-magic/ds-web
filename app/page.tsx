@@ -1,14 +1,13 @@
-"use client";
-
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  ArrowRight, 
-  ShieldCheck, 
-  Zap, 
-  Lightbulb, 
-  Globe, 
+import {
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Lightbulb,
+  Globe,
   ChevronRight,
   Code2
 } from "lucide-react";
@@ -20,9 +19,81 @@ import ServicesGrid from "@/components/ServicesGrid";
 import StatsSection from "@/components/StatsSection";
 import FAQSection from "@/components/FAQSection";
 
+export const metadata: Metadata = {
+  title: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+  description:
+    "Over 25 years engineering carrier-grade telecom gateways (Mbuni MMS, Zorilla SMS, Njiwa), bespoke enterprise software, and mission-critical digital systems across Africa.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+    description:
+      "Over 25 years engineering carrier-grade telecom gateways (Mbuni MMS, Zorilla SMS, Njiwa), bespoke enterprise software, and mission-critical digital systems across Africa.",
+    url: "/",
+    images: [
+      {
+        url: "/images/products.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Digital Solutions Enterprise Telecom Gateways and Software",
+      },
+    ],
+  },
+  twitter: {
+    title: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+    description:
+      "Over 25 years engineering carrier-grade telecom gateways (Mbuni MMS, Zorilla SMS, Njiwa), bespoke enterprise software, and mission-critical digital systems across Africa.",
+    images: ["/images/products.jpg"],
+  },
+};
+
 export default function HomePage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "How can Digital Solutions help your business?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "We focus on finding the best solution tailored specifically to our customers' operational needs with mastery of computing technology at a fundamental level.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Will Digital Technology from DSL boost my business?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Our state-of-the-art solutions grant your business a significant competitive edge because systems are carefully tailored by our expert developers rather than restricted to off-the-shelf templates.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What makes DSL's telecommunication gateways different?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "DSL has built world-renowned open-source and commercial engines like Mbuni (MMS Gateway) and Njiwa (world's 1st open-source GSMA eSIM RSP manager), written in high-performance C/C++ with multi-threaded routing cores.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Can you build custom bespoke software for unique industry requirements?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. Customers frequently approach DSL with complex IT problems that cannot be solved with standard software. We build multi-platform client/server systems, internet applications, financial transaction pipelines, and secure IoT management suites.",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-[#000000] text-zinc-900 dark:text-white selection:bg-[#ea1d05] selection:text-white flex flex-col justify-between transition-colors duration-300 relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <Navbar />
 
       <main className="flex-grow">
@@ -38,11 +109,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
             <div className="max-w-3xl space-y-8 text-center lg:text-left">
               {/* Brand Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-[#121215]/90 text-zinc-800 dark:text-white border border-zinc-300 dark:border-white/15 shadow-sm dark:shadow-lg backdrop-blur-md animate-float">
-                <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea1d05] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ea1d05]"></span>
-                </span>
+              <div className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-white/90 dark:bg-[#121215]/90 text-zinc-800 dark:text-white border border-zinc-300 dark:border-white/15 shadow-sm dark:shadow-lg backdrop-blur-md animate-float">
                 <span>Promoting Computing as an Aid to Business Productivity</span>
               </div>
 

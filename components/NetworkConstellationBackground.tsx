@@ -6,6 +6,7 @@ import { useTheme } from "./ThemeProvider";
 interface ConstellationProps {
   opacity?: number;
   className?: string;
+  offsetY?: number;
 }
 
 interface DeviceNode {
@@ -34,6 +35,7 @@ interface PacketStream {
 export default function NetworkConstellationBackground({
   opacity = 0.9,
   className = "",
+  offsetY = 0.08,
 }: ConstellationProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { theme } = useTheme();
@@ -45,13 +47,13 @@ export default function NetworkConstellationBackground({
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || 400);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 300);
+    let width = (canvas.width = canvas.parentElement?.clientWidth || (typeof window !== "undefined" ? window.innerWidth : 400));
+    let height = (canvas.height = canvas.parentElement?.clientHeight || (typeof window !== "undefined" ? window.innerHeight : 300));
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = canvas.parentElement?.clientWidth || 400;
-      height = canvas.height = canvas.parentElement?.clientHeight || 300;
+      width = canvas.width = canvas.parentElement?.clientWidth || window.innerWidth || 400;
+      height = canvas.height = canvas.parentElement?.clientHeight || window.innerHeight || 300;
     };
 
     window.addEventListener("resize", handleResize);
@@ -340,7 +342,7 @@ export default function NetworkConstellationBackground({
       ctx.clearRect(0, 0, width, height);
 
       const centerX = width * 0.5;
-      const centerY = height * 0.5;
+      const centerY = height * (0.5 + offsetY);
 
       // 1. Ambient Particles
       for (let i = 0; i < ambientParticles.length; i++) {

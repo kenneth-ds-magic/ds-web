@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Send, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  CheckCircle2, 
-  Sparkles, 
-  Clock 
+import {
+  Send,
+  Phone,
+  Mail,
+  MapPin,
+  CheckCircle2,
+  Sparkles,
+  Clock
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";

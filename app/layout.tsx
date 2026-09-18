@@ -19,13 +19,84 @@ const outfit = Outfit({
   weight: ["400", "500", "600", "700"],
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dsmagic.com";
+
 export const metadata: Metadata = {
-  title: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+    template: "%s | Digital Solutions",
+  },
   description:
-    "Promoting the use of computing as an aid to business productivity. Over 25 years of cutting-edge R&D, open-source telecom gateways (Mbuni, Zorilla, Njiwa), and bespoke enterprise digital architecture.",
+    "Promoting computing as an aid to business productivity. Over 25 years of cutting-edge R&D, open-source telecom gateways (Mbuni, Zorilla, Njiwa), and bespoke enterprise digital architecture across Africa.",
+  keywords: [
+    "Digital Solutions Ltd",
+    "Mbuni MMS Gateway",
+    "Zorilla SMS Engine",
+    "Njiwa Messaging Gateway",
+    "Carrier MMSC Switch",
+    "SMSC Gateway",
+    "SMPP Protocol Gateway",
+    "MM4 MM7 Interconnection",
+    "Telecommunications Uganda",
+    "Enterprise Software East Africa",
+    "Carrier Grade Software Development",
+    "Telecom Systems Engineering",
+    "Kampala Software Company",
+    "Uganda Software Company",
+  ],
+  authors: [{ name: "Digital Solutions Ltd", url: baseUrl }],
+  creator: "Digital Solutions Ltd",
+  publisher: "Digital Solutions Ltd",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    siteName: "Digital Solutions Ltd",
+    title: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+    description:
+      "Carrier-grade telecommunications gateways, open-source infrastructure (Mbuni, Zorilla, Njiwa), and bespoke enterprise digital systems.",
+    images: [
+      {
+        url: "/images/products.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Digital Solutions Telecommunications and Enterprise Platforms",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Solutions | Pioneering Telecommunications, Web & Mobile Systems",
+    description:
+      "Carrier-grade telecommunications gateways, open-source infrastructure (Mbuni, Zorilla, Njiwa), and bespoke enterprise digital systems.",
+    images: ["/images/products.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/images/log-no-bg.png",
+    shortcut: "/images/log-no-bg.png",
+    apple: "/images/log-no-bg.png",
   },
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -36,7 +107,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${outfit.variable} dark scroll-smooth h-full`}
+      className={`${montserrat.variable} ${outfit.variable} scroll-smooth h-full`}
       suppressHydrationWarning
     >
       <head>
@@ -45,17 +116,79 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('dsl-theme') || 'dark';
+                  localStorage.removeItem('dsl-theme');
+                  var saved = localStorage.getItem('dsl_theme_mode');
+                  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var theme = (saved === 'dark' || saved === 'light') ? saved : (prefersDark ? 'dark' : 'light');
+                  var root = document.documentElement;
                   if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.classList.remove('light');
+                    root.classList.add('dark');
+                    root.classList.remove('light');
                   } else {
-                    document.documentElement.classList.remove('dark');
-                    document.documentElement.classList.add('light');
+                    root.classList.remove('dark');
+                    root.classList.add('light');
                   }
                 } catch(e) {}
               })();
             `,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": `${baseUrl}/#organization`,
+                  name: "Digital Solutions Ltd",
+                  alternateName: ["DSL", "Digital Solutions"],
+                  url: baseUrl,
+                  logo: {
+                    "@type": "ImageObject",
+                    url: `${baseUrl}/images/log-no-bg.png`,
+                  },
+                  description:
+                    "Pioneering research and development house incorporated in Uganda in 1998, developing carrier-grade telecommunication gateways, open-source infrastructure (Mbuni, Zorilla, Njiwa), and enterprise systems.",
+                  foundingDate: "1998",
+                  address: {
+                    "@type": "PostalAddress",
+                    streetAddress: "Plot 140, Bukoto Street, Kamwokya",
+                    postOfficeBoxNumber: "P.O. Box 71871",
+                    addressLocality: "Kampala",
+                    addressCountry: "UG",
+                  },
+                  contactPoint: [
+                    {
+                      "@type": "ContactPoint",
+                      telephone: "+256-752-707743",
+                      contactType: "customer service",
+                      email: "info@dsmagic.com",
+                      availableLanguage: ["English", "Swahili"],
+                    },
+                  ],
+                  knowsAbout: [
+                    "Telecommunications Engineering",
+                    "SMS Gateway Development",
+                    "MMSC & MMS Gateway (Mbuni)",
+                    "SMPP & MM4/MM7 Protocols",
+                    "Enterprise Cloud Software",
+                    "Mobile Application Architecture",
+                  ],
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": `${baseUrl}/#website`,
+                  url: baseUrl,
+                  name: "Digital Solutions Ltd",
+                  description: "Pioneering Telecommunications, Web & Mobile Systems",
+                  publisher: {
+                    "@id": `${baseUrl}/#organization`,
+                  },
+                },
+              ],
+            }),
           }}
         />
       </head>

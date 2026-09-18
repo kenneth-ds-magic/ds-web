@@ -148,3 +148,17 @@ html.dark .bg-grid-pattern,
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+@keyframes progress-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-progress-grow {
+  animation: progress-grow linear forwards;
+}
+
