@@ -32,7 +32,7 @@ const faqs: FAQItem[] = [
     question: "What makes DSL's telecommunication gateways different?",
     answers: [
       "DSL has built world-renowned open-source and commercial engines like Mbuni (MMS Gateway) and Njiwa (world's 1st open-source GSMA eSIM RSP manager).",
-      "Our systems are written in high-performance compiled languages (C/C++) with multi-threaded routing cores capable of handling tens of thousands of simultaneous telecom transactions per second.",
+      "Our systems are written in high-performance languages with multi-threaded routing cores capable of handling tens of thousands of simultaneous telecom transactions per second.",
       "We support direct SMSC, MMSC, SMPP, USSD, and SIP trunking without reliance on expensive third-party middleware.",
     ],
   },
